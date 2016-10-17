@@ -51,7 +51,7 @@ var Action = {
 
 app.get('/listBooks', Action.getListBooks);
 app.get('/add_book.html', Action.getAddingBookForm);
-app.post('/addBook', urlencodedParser, Action.postAddBook)
+app.post('/addBook', urlencodedParser, Action.postAddBook);
 
 
 var server = app.listen(8081, function () {
@@ -59,4 +59,4 @@ var server = app.listen(8081, function () {
    var port = server.address().port
 
    console.log("Listening at http://%s:%s", host, port)
-})
+});
