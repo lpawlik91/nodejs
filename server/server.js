@@ -46,10 +46,14 @@ var Action = {
 		}); 
 	},
 	
+	getIndexHtml : function (req, res) {
+		res.sendFile( __dirname + "/" + "index.html" );
+	}
 	
 };
 
 app.get('/listBooks', Action.getListBooks);
+app.get('/', Action.getIndexHtml);
 app.get('/add_book.html', Action.getAddingBookForm);
 app.post('/addBook', urlencodedParser, Action.postAddBook);
 
