@@ -1,22 +1,26 @@
 {
-   "Alicja w krainie czarów" : {
-      "title" : "Alicja w krainie czarów", 
-	   "author" : "password1",
-	   "cover" : "teacher",
-	   "id": 1
+   "Design Patterns: Elements of Reusable Object-Oriented Software" : {
+      "title" : "Design Patterns: Elements of Reusable Object-Oriented Software", 
+	   "author" : "Gang of Four",
+	   "cover" : "https://upload.wikimedia.org/wikipedia/en/7/78/Design_Patterns_cover.jpg",
    },
    
-  "Alicja w krainie czarów" : {
-      "title" : "Alicja w krainie czarów", 
-	   "author" : "password1",
-	   "cover" : "teacher",
-	   "id": 2
+  "Alice's Adventures in Wonderland" : {
+      "title" : "Alice's Adventures in Wonderland", 
+	   "author" : "Lewis Carroll",
+	   "cover" : "https://upload.wikimedia.org/wikipedia/commons/a/af/AlicesAdventuresInWonderlandTitlePage.jpg",
    },
    
-  "Alicja w krainie czarów" : {
-      "title" : "Alicja w krainie czarów", 
-	   "author" : "password1",
-	   "cover" : "teacher",
-	   "id": 3
-   }
+  "Unix in a Nutshell" : {
+      "title" : "Unix in a Nutshell", 
+	   "author" : "Arnold Robbins",
+	   "cover" : "https://images-na.ssl-images-amazon.com/images/I/51W740PBX7L._SX331_BO1,204,203,200_.jpg",
+   },
+   
+   "The Hobbit or There and Back Again" : {
+      "title" : "The Hobbit or There and Back Again", 
+	   "author" : "John Ronald Reuel Tolkien",
+	   "cover" : "https://upload.wikimedia.org/wikipedia/commons/e/e7/The_Hobbit_-_title_page_of_first_American_print.jpg",
+   },
+   
 }
