@@ -3,20 +3,20 @@ var app = express();
 var fs = require("fs");
 var bodyParser = require('body-parser');
 
+app.set('view engine', 'ejs');
+
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var booksPath = __dirname + "/" + "books.json";
 	
 var Action = {
 	
-	getListBooks : function (req, res) {
-	   fs.readFile( __dirname + "/" + "books.json", 'utf8', function (err, data) {
-		  console.log( data );
-		  res.end( data );
-	   });
+	getListBooks : function (req, res) {	   
+	   res.render("listOfBooks");
 	},
 	getAddingBookForm : function(req, res) {
-		res.sendFile( __dirname + "/" + "add_book.html" );
+		//res.sendFile( __dirname + "/" + "add_book.html" );
+		res.render("addBookForm");
 	},	
 	postAddBook : function (req, res) {
 		var toAdd = { 
@@ -45,16 +45,15 @@ var Action = {
 			res.end( JSON.stringify(data));
 		}); 
 	},
-	
 	getIndexHtml : function (req, res) {
-		res.sendFile( __dirname + "/" + "index.html" );
+		res.render("index");
 	}
 	
 };
 
 app.get('/listBooks', Action.getListBooks);
 app.get('/', Action.getIndexHtml);
-app.get('/add_book.html', Action.getAddingBookForm);
+app.get('/addBookForm', Action.getAddingBookForm);
 app.post('/addBook', urlencodedParser, Action.postAddBook);
 
 
