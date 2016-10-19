@@ -8,31 +8,31 @@ app.set('view engine', 'ejs');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var booksPath = __dirname + "/" + "books.json";
+
+var INITIAL_LIMIT = 10;
+var nextElem = INITIAL_LIMIT;
 	
-	
+var allElementsFromDb = [];
 	
 var Action = {
 	
-	getListBooks : function (req, res) {	   
+	getListBooks : function (req, res) {
+
 		fs.readFile( booksPath, 'utf8', function (err, data) {
 			data = JSON.parse( data );
-			//data[req.body.title] = toAdd;
-			console.log( data );
-			//Action.dumpNewBooksFile(res, data);
-			//console.log("data.length" + data.length + "\ndata " + JSON.stringify(data));
-			numeric_array = [];
+			//console.log( data );
+			allElementsFromDb = [];
 			for (var key in data) {
 			  if (data.hasOwnProperty(key)) {
-				
-				numeric_array.push( data[key] );
+				allElementsFromDb.push( data[key] );
 			  }
 			}
-		
 			
-		
+			var limitedNumberOfForFirstReq = allElementsFromDb.length > INITIAL_LIMIT ? allElementsFromDb.slice(0, INITIAL_LIMIT) : allElementsFromDb.length;
+			nextElem = limitedNumberOfForFirstReq.length;
+			
 			res.render("listOfBooks", {
-				books : numeric_array,
-			
+				books : limitedNumberOfForFirstReq
 			});
 		});
 	
@@ -54,7 +54,7 @@ var Action = {
 		fs.readFile( booksPath, 'utf8', function (err, data) {
 			data = JSON.parse( data );
 			data[req.body.title] = toAdd;
-			console.log( data );
+			//console.log( data );
 			Action.dumpNewBooksFile(res, data);
 
 		});
@@ -70,11 +70,18 @@ var Action = {
 	},
 	getIndexHtml : function (req, res) {
 		res.render("index");
+	},
+	next : function (req, res) {
+		if(nextElem < allElementsFromDb.length) 
+			res.end(JSON.stringify(allElementsFromDb[nextElem++]));
+		else
+			res.end(null);
 	}
 	
 };
 
 app.get('/listBooks', Action.getListBooks);
+app.get('/next', Action.next);
 app.get('/', Action.getIndexHtml);
 app.get('/addBookForm', Action.getAddingBookForm);
 app.post('/addBook', urlencodedParser, Action.postAddBook);
