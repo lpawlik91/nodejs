@@ -1,1 +1,36 @@
-DupaDupa
+<html>
+<head>
+
+<script>
+window.onload = function(e){ 
+	var maxImgSizeBasedOnHeightOfBrowser = window.innerHeight /5;
+    var img = document.getElementsByClassName("image");
+	//alert(maxImgSizeBasedOnHeightOfBrowser);
+	//alert(screen.height + " " +  window.innerHeight)
+
+    for(i=0; i<img.length; i++) {
+      img[i].style.height = maxImgSizeBasedOnHeightOfBrowser;
+    }
+	
+	
+}
+</script>
+</head>
+<body>
+
+<table>
+<tbody>
+
+
+    <% books.forEach(function(book) { %>
+	<tr>
+        <td><%= book.title %></td>
+		<td><%= book.author %></td>
+		<td><img src="<%= book.cover %>" class="image" /></td>
+	</tr>
+    <% }); %>
+
+</tbody>
+</table>
+</body>
+</html>

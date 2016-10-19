@@ -9,13 +9,36 @@ app.set('view engine', 'ejs');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var booksPath = __dirname + "/" + "books.json";
 	
+	
+	
 var Action = {
 	
 	getListBooks : function (req, res) {	   
-	   res.render("listOfBooks");
+		fs.readFile( booksPath, 'utf8', function (err, data) {
+			data = JSON.parse( data );
+			//data[req.body.title] = toAdd;
+			console.log( data );
+			//Action.dumpNewBooksFile(res, data);
+			//console.log("data.length" + data.length + "\ndata " + JSON.stringify(data));
+			numeric_array = [];
+			for (var key in data) {
+			  if (data.hasOwnProperty(key)) {
+				
+				numeric_array.push( data[key] );
+			  }
+			}
+		
+			
+		
+			res.render("listOfBooks", {
+				books : numeric_array,
+			
+			});
+		});
+	
+	 
 	},
 	getAddingBookForm : function(req, res) {
-		//res.sendFile( __dirname + "/" + "add_book.html" );
 		res.render("addBookForm");
 	},	
 	postAddBook : function (req, res) {
