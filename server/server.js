@@ -17,10 +17,16 @@ var allElementsFromDb = [];
 var Action = {
 	
 	getListBooks : function (req, res) {
-
 		fs.readFile( booksPath, 'utf8', function (err, data) {
+			if(err){
+				res.render("listOfBooks", {
+					result: "error",
+					txt: "Database doesn't exists!"
+				});
+				return;
+			}
 			data = JSON.parse( data );
-			//console.log( data );
+			
 			allElementsFromDb = [];
 			for (var key in data) {
 			  if (data.hasOwnProperty(key)) {
@@ -28,10 +34,11 @@ var Action = {
 			  }
 			}
 			
-			var limitedNumberOfForFirstReq = allElementsFromDb.length > INITIAL_LIMIT ? allElementsFromDb.slice(0, INITIAL_LIMIT) : allElementsFromDb.length;
+			var limitedNumberOfForFirstReq = allElementsFromDb.length > INITIAL_LIMIT ? allElementsFromDb.slice(0, INITIAL_LIMIT) : allElementsFromDb;
 			nextElem = limitedNumberOfForFirstReq.length;
 			
 			res.render("listOfBooks", {
+				result: "success",
 				books : limitedNumberOfForFirstReq
 			});
 		});
@@ -52,9 +59,9 @@ var Action = {
 	},
 	readBooksFromFile : function (req, res, toAdd) {
 		fs.readFile( booksPath, 'utf8', function (err, data) {
-			data = JSON.parse( data );
+			if(err) data = {};
+			else data = JSON.parse( data );
 			data[req.body.title] = toAdd;
-			//console.log( data );
 			Action.dumpNewBooksFile(res, data);
 
 		});
@@ -62,10 +69,17 @@ var Action = {
 	dumpNewBooksFile : function (res, data) {
 		fs.writeFile(booksPath, JSON.stringify(data), function(err) {
 			if(err) {
+				res.render("addBookResult", {
+					result: "error",
+					txt: "Eror during saving file!"
+				})
 				return console.log(err);
 			}
 			console.log("The file was saved!");
-			res.end( JSON.stringify(data));
+			res.render("addBookResult", {
+				result: "success",
+				txt: "Your book added successfully"
+			});
 		}); 
 	},
 	getIndexHtml : function (req, res) {

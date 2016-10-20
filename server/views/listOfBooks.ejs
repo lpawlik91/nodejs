@@ -4,35 +4,30 @@
 <script>
 
 var isAllDataReceived = false;
-var maxImgSizeBasedOnHeightOfBrowser = window.innerHeight /5;
+var maxImgSizeBasedOnHeightOfBrowser = window.innerHeight / 5;
+
 function insertRow(data){
-            var table=document.getElementById("mainTable");
-            var row=table.insertRow(table.rows.length);
-            var cell1=row.insertCell(0);
-            var t1=document.createTextNode(data.title);
-                
-                cell1.appendChild(t1);
-            var cell2=row.insertCell(1);
-            var t2=document.createTextNode(data.author);
-                
-                cell2.appendChild(t2);
-            var cell3=row.insertCell(2);
-	  
-			var image = document.createElement("img");
+var table=document.getElementById("mainTable");
+var row=table.insertRow(table.rows.length);
 
-			image.style.height = maxImgSizeBasedOnHeightOfBrowser;
-			image.className = "image";
-			image.src = data.cover;            // image.src = "IMAGE URL/PATH"
-		
-			cell3.appendChild(image);
-  
-
+var titleCell=row.insertCell(0);
+var titleText=document.createTextNode(data.title);	
+	titleCell.appendChild(titleText);
+var authorCell=row.insertCell(1);
+var authorText=document.createTextNode(data.author);
+	authorCell.appendChild(authorText);
+var imageCell=row.insertCell(2);
+var image = document.createElement("img");
+	image.style.height = maxImgSizeBasedOnHeightOfBrowser;
+	image.className = "image";
+	image.src = data.cover;
+	imageCell.appendChild(image);
 }
 
 function getNextBook()
 {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", "next", false ); // false for synchronous request
+    xmlHttp.open( "GET", "next", false );
     xmlHttp.send( null );
     return xmlHttp.responseText;
 }
@@ -46,29 +41,41 @@ window.onload = function(e){
     }
 	
 	window.onscroll = function(e) {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && isAllDataReceived == false) {
-	
-		var	receivedDataString = getNextBook();
-		if(receivedDataString == ""){ 
-			isAllDataReceived = true;
-			return;
-		}
+		if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && isAllDataReceived == false) {
 		
-		insertRow(JSON.parse(receivedDataString));
+			var	receivedDataString = getNextBook();
+			if(receivedDataString == ""){ 
+				isAllDataReceived = true;
+				return;
+			}
+			
+			insertRow(JSON.parse(receivedDataString));
 
-    }
-};
-	
-	
-	
+		}
+	};
+		
 }
 </script>
+<style>
+table, th, td {text-align: center; border-collapse: collapse;}
+
+</style>
 </head>
 <body>
-
+<a href="/">back</a>
+<%if (result == "error") { %>
+<div class="error"><%= txt %> </div>
+<% } else { %>
+<div id="content">
 <table id="mainTable">
 <tbody>
-
+<thead>
+<tr>
+<th>Title</th>
+<th>Author</th>
+<th>Cover</th>
+</tr>
+</thead>
 
     <% books.forEach(function(book) { %>
 	<tr>
@@ -80,5 +87,7 @@ window.onload = function(e){
 
 </tbody>
 </table>
+</div>
+ <% } %>
 </body>
 </html>
