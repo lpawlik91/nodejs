@@ -1,0 +1,21 @@
+table, th, td {text-align: center; border-collapse: collapse;}
+.success {
+	color:green;
+	text-align:center;
+	font-size: 35px;
+}
+.error {
+	color: red;
+	text-align: center;
+	font-size: 35px;
+}
+a {
+	font-size:18px;
+	color:blue;
+	text-decoration: none;
+}
+
+a:hover {
+	color:blue;
+	text-decoration: underline;
+}

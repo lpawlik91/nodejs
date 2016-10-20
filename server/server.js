@@ -4,6 +4,7 @@ var fs = require("fs");
 var bodyParser = require('body-parser');
 
 app.set('view engine', 'ejs');
+app.use(express.static(__dirname + '/public'));
 
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -16,6 +17,16 @@ var allElementsFromDb = [];
 	
 var Action = {
 	
+	dumpDbToGlobal: function(data) {
+		allElementsFromDb = [];
+		for (var key in data) {
+			if (data.hasOwnProperty(key)) {
+				allElementsFromDb.push( data[key] );
+			}
+		}
+			
+	},
+	
 	getListBooks : function (req, res) {
 		fs.readFile( booksPath, 'utf8', function (err, data) {
 			if(err){
@@ -23,17 +34,13 @@ var Action = {
 					result: "error",
 					txt: "Database doesn't exists!"
 				});
+				console.log("getListBooks: Database doesn't exists!");
 				return;
 			}
 			data = JSON.parse( data );
 			
-			allElementsFromDb = [];
-			for (var key in data) {
-			  if (data.hasOwnProperty(key)) {
-				allElementsFromDb.push( data[key] );
-			  }
-			}
-			
+			Action.dumpDbToGlobal(data);
+
 			var limitedNumberOfForFirstReq = allElementsFromDb.length > INITIAL_LIMIT ? allElementsFromDb.slice(0, INITIAL_LIMIT) : allElementsFromDb;
 			nextElem = limitedNumberOfForFirstReq.length;
 			
@@ -45,9 +52,11 @@ var Action = {
 	
 	 
 	},
+	
 	getAddingBookForm : function(req, res) {
 		res.render("addBookForm");
 	},	
+	
 	postAddBook : function (req, res) {
 		var toAdd = { 
 			title:req.body.title,
@@ -57,6 +66,7 @@ var Action = {
 		};
 		Action.readBooksFromFile(req, res, toAdd);
 	},
+	
 	readBooksFromFile : function (req, res, toAdd) {
 		fs.readFile( booksPath, 'utf8', function (err, data) {
 			if(err) data = {};
@@ -66,14 +76,16 @@ var Action = {
 
 		});
 	},
+	
 	dumpNewBooksFile : function (res, data) {
 		fs.writeFile(booksPath, JSON.stringify(data), function(err) {
 			if(err) {
 				res.render("addBookResult", {
 					result: "error",
 					txt: "Eror during saving file!"
-				})
-				return console.log(err);
+				});
+				console.log("dumpNewBooksFile: Eror during saving file!");
+				return;
 			}
 			console.log("The file was saved!");
 			res.render("addBookResult", {
@@ -82,9 +94,11 @@ var Action = {
 			});
 		}); 
 	},
+	
 	getIndexHtml : function (req, res) {
 		res.render("index");
 	},
+	
 	next : function (req, res) {
 		if(nextElem < allElementsFromDb.length) 
 			res.end(JSON.stringify(allElementsFromDb[nextElem++]));
